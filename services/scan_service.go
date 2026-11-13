@@ -257,10 +257,7 @@ func sarifToFirstPartyVulns(sarifScan sarif.SarifSchema210Json, assetVersion *mo
 
 			rule := ruleMap[utils.OrDefault(result.RuleID, "")]
 
-			ruleProperties := map[string]any{}
-			if rule.Properties != nil {
-				ruleProperties = rule.Properties.AdditionalProperties
-			}
+			ruleProperties := rule.Properties.Fields()
 
 			firstPartyVulnerability := models.FirstPartyVuln{
 				Vulnerability: models.Vulnerability{
@@ -964,10 +961,7 @@ func (s *scanService) ScanSarifWithoutSaving(ctx context.Context, sarifScan sari
 				continue
 			}
 			rule := ruleMap[utils.OrDefault(result.RuleID, "")]
-			ruleProperties := map[string]any{}
-			if rule.Properties != nil && rule.Properties.AdditionalProperties != nil {
-				ruleProperties = rule.Properties.AdditionalProperties
-			}
+			ruleProperties := rule.Properties.Fields()
 			msg := utils.OrDefault(&result.Message.Text, "")
 			vuln := dtos.FirstPartyVuln{
 				ScannerIDs:      scannerID,
